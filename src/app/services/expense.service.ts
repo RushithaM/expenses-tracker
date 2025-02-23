@@ -1,38 +1,25 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Expense } from '../models/expense';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExpenseService {
-  private expenses: Expense[] = [];
-  private expensesSubject = new BehaviorSubject<Expense[]>([]);
+  private apiUrl = 'http://localhost:3000/api'; // Adjust this URL to match your backend API
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  addExpense(expense: Expense): void {
-    expense.id = this.generateId();
-    this.expenses.push(expense);
-    this.expensesSubject.next(this.expenses);
+  addExpense(expense: Expense): Observable<Expense> {
+    return this.http.post<Expense>(`${this.apiUrl}/expenses`, expense);
   }
 
   getExpenses(): Observable<Expense[]> {
-    return this.expensesSubject.asObservable();
+    return this.http.get<Expense[]>(`${this.apiUrl}/expenses`);
   }
 
-  deleteExpense(id: number): Observable<void> {
-    return new Observable<void>(observer => {
-      this.expenses = this.expenses.filter(expense => expense.id !== id);
-      this.expensesSubject.next(this.expenses);
-      observer.next();
-      observer.complete();
-    });
-  }
-
-  private generateId(): number {
-    return this.expenses.length > 0 
-      ? Math.max(...this.expenses.map(expense => expense.id || 0)) + 1 
-      : 1;
+  deleteExpense(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/expenses/${id}`);
   }
 }

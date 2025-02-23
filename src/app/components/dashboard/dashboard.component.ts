@@ -18,9 +18,26 @@ export class DashboardComponent implements OnInit {
   constructor(private expenseService: ExpenseService) {}
 
   ngOnInit(): void {
-    this.expenseService.getExpenses().subscribe(expenses => {
-      this.calculateTotals(expenses);
-      this.recentExpenses = expenses.slice(-5).reverse();
+    this.loadExpenses();
+  }
+
+  loadExpenses(): void {
+    this.expenseService.getExpenses().subscribe({
+      next: (expenses) => {
+        // Sort expenses by date in descending order
+        const sortedExpenses = expenses.sort((a, b) => 
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+        
+        // Get the 5 most recent expenses
+        this.recentExpenses = sortedExpenses.slice(0, 5);
+        
+        // Calculate totals for all expenses
+        this.calculateTotals(expenses);
+      },
+      error: (error) => {
+        console.error('Error loading expenses:', error);
+      }
     });
   }
 

@@ -27,9 +27,15 @@ export class ExpenseFormComponent {
 
   onSubmit(): void {
     if (this.expense.description && this.expense.amount) {
-      this.expenseService.addExpense({ ...this.expense });
-      // Navigate back to dashboard after successful submission
-      this.router.navigate(['/dashboard']);
+      this.expenseService.addExpense({ ...this.expense }).subscribe({
+        next: () => {
+          // Navigate back to dashboard after successful submission
+          this.router.navigate(['/dashboard']);
+        },
+        error: (error) => {
+          console.error('Error adding expense:', error);
+        }
+      });
     }
   }
 }

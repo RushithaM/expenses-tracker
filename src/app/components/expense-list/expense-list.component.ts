@@ -20,14 +20,26 @@ export class ExpenseListComponent implements OnInit {
   }
 
   loadExpenses(): void {
-    this.expenseService.getExpenses().subscribe(expenses => {
-      this.expenses = expenses;
+    this.expenseService.getExpenses().subscribe({
+      next: (expenses) => {
+        this.expenses = expenses;
+      },
+      error: (error) => {
+        console.error('Error fetching expenses:', error);
+      }
     });
   }
 
-  deleteExpense(id: number): void {
-    this.expenseService.deleteExpense(id).subscribe(() => {
-      this.loadExpenses();
-    });
+  deleteExpense(id: string): void {
+    if (id) {
+      this.expenseService.deleteExpense(id).subscribe({
+        next: () => {
+          this.loadExpenses();
+        },
+        error: (error) => {
+          console.error('Error deleting expense:', error);
+        }
+      });
+    }
   }
 }
