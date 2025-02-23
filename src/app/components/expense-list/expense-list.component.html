@@ -1,0 +1,11 @@
+<div class="expense-list">
+  <div *ngFor="let expense of expenses" class="expense-item">
+    <div class="expense-details">
+      <h3>{{expense.description}}</h3>
+      <p>Amount: ${{expense.amount}}</p>
+      <p>Date: {{expense.date | date:'mediumDate'}}</p>
+      <p>Category: {{expense.category}}</p>
+    </div>
+    <button (click)="deleteExpense(expense.id!)">Delete</button>
+  </div>
+</div>
