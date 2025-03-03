@@ -1,15 +1,20 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const dotenv = require('dotenv');
 const app = express();
+
+// Load environment variables
+dotenv.config();
 
 app.use(cors());
 app.use(express.json());
 
-const mongoUri = 'mongodb+srv://test:test123@e-commerce.y21e0.mongodb.net/expense-tracker';
+// Get MongoDB URI from environment variable
+const mongoUri = process.env.MONGO_URI;
 
 // Connect to MongoDB
-mongoose.connect(mongoUri);
+mongoose.connect('______________________________');
 
 // Define Expense Schema
 const expenseSchema = new mongoose.Schema({

@@ -7,7 +7,7 @@ import { Expense } from '../models/expense';
   providedIn: 'root'
 })
 export class ExpenseService {
-  private apiUrl = 'http://localhost:3000/api'; // Adjust this URL to match your backend API
+  private apiUrl = 'http://localhost:3000/api'; 
 
   constructor(private http: HttpClient) {}
 

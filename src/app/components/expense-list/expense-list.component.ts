@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, KeyValuePipe } from '@angular/common';
 import { ExpenseService } from '../../services/expense.service';
 import { Expense } from '../../models/expense';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-expense-list',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, FormsModule, KeyValuePipe],
   templateUrl: './expense-list.component.html',
   styleUrls: ['./expense-list.component.css']
 })
 export class ExpenseListComponent implements OnInit {
   expenses: Expense[] = [];
+  groupedExpenses: { [category: string]: Expense[] } = {};
 
   constructor(private expenseService: ExpenseService) {}
 
@@ -20,26 +22,35 @@ export class ExpenseListComponent implements OnInit {
   }
 
   loadExpenses(): void {
-    this.expenseService.getExpenses().subscribe({
-      next: (expenses) => {
+    this.expenseService.getExpenses().subscribe(
+      (expenses) => {
         this.expenses = expenses;
+        this.groupExpensesByCategory();
       },
-      error: (error) => {
-        console.error('Error fetching expenses:', error);
+      (error) => {
+        console.error('Error loading expenses:', error);
       }
-    });
+    );
+  }
+
+  groupExpensesByCategory(): void {
+    this.groupedExpenses = this.expenses.reduce((acc: { [category: string]: Expense[] }, expense) => {
+      if (!acc[expense.category]) {
+        acc[expense.category] = [];
+      }
+      acc[expense.category].push(expense);
+      return acc;
+    }, {});
   }
 
   deleteExpense(id: string): void {
-    if (id) {
-      this.expenseService.deleteExpense(id).subscribe({
-        next: () => {
-          this.loadExpenses();
-        },
-        error: (error) => {
-          console.error('Error deleting expense:', error);
-        }
-      });
-    }
+    this.expenseService.deleteExpense(id).subscribe(
+      () => {
+        this.loadExpenses();
+      },
+      (error) => {
+        console.error('Error deleting expense:', error);
+      }
+    );
   }
 }

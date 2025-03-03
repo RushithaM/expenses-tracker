@@ -1,0 +1,84 @@
+.expense-list-container {
+  padding: 20px;
+}
+
+.expense-list-container h2 {
+  font-size: 24px;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.category-container {
+  margin-bottom: 20px;
+}
+
+.category-container h3 {
+  font-size: 20px;
+  color: #34495e;
+  margin-bottom: 10px;
+}
+
+.expense-list {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
+  gap: 15px;
+}
+
+.expense-item {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  width: 300px;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.expense-item:hover {
+  transform: translateY(-3px);
+}
+
+.expense-details {
+  flex: 1;
+}
+
+.expense-details h4 {
+  font-size: 18px;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.expense-amount {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.expense-date {
+  color: #7f8c8d;
+  font-size: 14px;
+}
+
+.expense-actions .delete-button {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.expense-actions .delete-button:hover {
+  background: #c0392b;
+}
+
+.expense-actions .delete-button i {
+  margin-right: 5px;
+}
+
+.no-expenses {
+  font-style: italic;
+  color: #7f8c8d;
+}
