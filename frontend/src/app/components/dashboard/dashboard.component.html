@@ -29,7 +29,7 @@
             <i class="fas fa-wallet"></i>
           </div>
           <h3>Total Expenses</h3>
-          <p class="amount">${{ totalExpenses.toFixed(2) }}</p>
+          <p class="amount">₹{{ totalExpenses.toFixed(2) }}</p>
           <p class="card-subtitle">{{ selectedTimeframe | titlecase }}</p>
           <div class="trend-indicator" [ngClass]="{
             'text-success': monthlyChange <= 0, 
@@ -106,9 +106,9 @@
                 <div class="category-header">
                   <span class="category-name">{{ category.key }}</span>
                   <div class="category-amounts">
-                    <span class="spent">${{ category.value.toFixed(2) }}</span>
+                    <span class="spent">₹{{ category.value.toFixed(2) }}</span>
                     <span class="separator">/</span>
-                    <span class="budget">${{ categoryBudgets[category.key].toFixed(2) }}</span>
+                    <span class="budget">₹{{ categoryBudgets[category.key].toFixed(2) }}</span>
                   </div>
                 </div>
                 <div class="budget-progress">
@@ -123,7 +123,7 @@
                   </div>
                 </div>
                 <div class="remaining-text">
-                  Remaining: ${{ getRemainingBudget(category.key).toFixed(2) }}
+                  Remaining: ₹{{ getRemainingBudget(category.key).toFixed(2) }}
                 </div>
               </div>
             </div>
@@ -172,7 +172,7 @@
                   <span class="transaction-date">{{ expense.date | date:'MMM dd, yyyy' }}</span>
                 </div>
               </div>
-              <div class="transaction-amount">${{ expense.amount.toFixed(2) }}</div>
+              <div class="transaction-amount">₹{{ expense.amount.toFixed(2) }}</div>
             </div>
           </div>
           <div class="no-results" *ngIf="filteredAndSortedTransactions.length === 0">
