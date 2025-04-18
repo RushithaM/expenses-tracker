@@ -1,0 +1,35 @@
+<div class="app-container">
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <i class="fas fa-wallet"></i>
+      <h1>Expense Tracker</h1>
+    </div>
+    <ul class="nav-links">
+      <li>
+        <a routerLink="/add" routerLinkActive="active" class="nav-link">
+          <i class="fas fa-plus-circle"></i>
+          <span>Add Expense</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+          <i class="fas fa-chart-pie"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/expenses" routerLinkActive="active" class="nav-link">
+          <i class="fas fa-list"></i>
+          <span>Expenses</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  
+  <main class="main-content">
+    <div class="content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+  <app-ai-assistant></app-ai-assistant>
+</div>

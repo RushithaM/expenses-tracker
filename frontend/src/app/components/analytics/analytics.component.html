@@ -1,0 +1,85 @@
+<div class="analytics-container">
+  <div class="analytics-header">
+    <h2>Expense Analytics</h2>
+    <div class="time-filter">
+      <select [(ngModel)]="selectedYear" (change)="loadData()">
+        <option [value]="year" *ngFor="let year of [2023, 2024]">{{ year }}</option>
+      </select>
+      <select [(ngModel)]="selectedMonth" (change)="loadData()">
+        <option [value]="month" *ngFor="let month of [1,2,3,4,5,6,7,8,9,10,11,12]">
+          {{ month | date:'MMMM':'UTC' }}
+        </option>
+      </select>
+    </div>
+    <div class="export-buttons">
+      <button class="export-btn csv" (click)="exportToCsv()">
+        <i class="fas fa-file-csv"></i>
+        Export to CSV
+      </button>
+      <button class="export-btn pdf" (click)="exportToPdf()">
+        <i class="fas fa-file-pdf"></i>
+        Export to PDF
+      </button>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <!-- Monthly Trends Chart -->
+    <div class="chart-container">
+      <div class="chart-header">
+        <h3>Monthly Spending Trends</h3>
+        <div class="chart-legend">
+          <span class="legend-item">
+            <span class="legend-color" style="background: #3498db"></span>
+            Total Expenses
+          </span>
+        </div>
+      </div>
+      <canvas #monthlyTrendChart></canvas>
+    </div>
+
+    <!-- Category Breakdown Chart -->
+    <div class="chart-container">
+      <div class="chart-header">
+        <h3>Expense Distribution by Category</h3>
+      </div>
+      <canvas #categoryBreakdownChart></canvas>
+    </div>
+
+    <!-- Budget Comparison Chart -->
+    <div class="chart-container">
+      <div class="chart-header">
+        <h3>Budget vs Actual Spending</h3>
+        <div class="chart-legend">
+          <span class="legend-item">
+            <span class="legend-color" style="background: rgba(46, 204, 113, 0.5)"></span>
+            Budget
+          </span>
+          <span class="legend-item">
+            <span class="legend-color" style="background: rgba(231, 76, 60, 0.5)"></span>
+            Actual
+          </span>
+        </div>
+      </div>
+      <canvas #budgetComparisonChart></canvas>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="summary-card total-expenses">
+      <h4>Total Expenses</h4>
+      <p>{{ getTotalExpenses() | currency }}</p>
+    </div>
+    <div class="summary-card budget-status">
+      <h4>Budget Status</h4>
+      <p [class.over-budget]="isOverBudget()">
+        {{ getBudgetStatus() | currency }}
+      </p>
+    </div>
+    <div class="summary-card top-category">
+      <h4>Top Spending Category</h4>
+      <p>{{ getTopCategory() }}</p>
+    </div>
+  </div>
+</div> 

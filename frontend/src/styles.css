@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+:root {
+  --color-dark-navy: #021024;
+  --color-royal-blue: #052659;
+  --color-light-blue-gray: #5483B3;
+  --color-pale-blue-gray: #7DA0CA;
+  --color-almost-white: #C1E8FF;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--color-almost-white);
+  color: var(--color-dark-navy);
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 280px;
+  background: var(--color-dark-navy);
+  color: var(--color-almost-white);
+  padding: 20px;
+  position: fixed;
+  height: 100vh;
+  transition: all 0.3s ease;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-light-blue-gray);
+  margin-bottom: 20px;
+}
+
+.sidebar-header i {
+  font-size: 24px;
+}
+
+.sidebar h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.nav-links {
+  list-style: none;
+  padding: 0;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  color: var(--color-almost-white);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  margin-bottom: 5px;
+}
+
+.nav-link i {
+  font-size: 18px;
+  width: 25px;
+}
+
+.nav-link:hover, .nav-link.active {
+  background: var(--color-royal-blue);
+  color: var(--color-almost-white);
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 30px;
+  background-color: var(--color-almost-white);
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Card Styles */
+.card {
+  background: var(--color-almost-white);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px var(--color-pale-blue-gray);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px var(--color-light-blue-gray);
+}
+
+/* Button Styles */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: var(--color-royal-blue);
+  color: var(--color-almost-white);
+}
+
+.btn-primary:hover {
+  background: var(--color-dark-navy);
+}
+
+/* Form Styles */
+input, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--color-pale-blue-gray);
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--color-almost-white);
+  color: var(--color-dark-navy);
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--color-light-blue-gray);
+  box-shadow: 0 0 0 2px var(--color-pale-blue-gray);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px;
+    padding: 10px;
+  }
+
+  .sidebar-header h1, .nav-link span {
+    display: none;
+  }
+
+  .main-content {
+    margin-left: 70px;
+  }
+
+  .nav-link {
+    justify-content: center;
+    padding: 15px 0;
+  }
+
+  .nav-link i {
+    margin: 0;
+  }
+}

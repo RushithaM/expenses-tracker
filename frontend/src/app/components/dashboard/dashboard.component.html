@@ -1,0 +1,192 @@
+<div class="dashboard">
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h2>Financial Overview</h2>
+      <p class="subtitle">Track your spending and save more</p>
+    </div>
+    <div class="header-controls">
+      <select class="timeframe-select" (change)="changeTimeframe($event)">
+        <option value="month">This Month</option>
+        <option value="quarter">This Quarter</option>
+        <option value="year">This Year</option>
+      </select>
+      <button class="refresh-btn" (click)="loadExpenses()">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+    </div>
+  </div>
+  
+  <div class="dashboard-grid">
+    <!-- First Column - Total Expenses and Chart -->
+    <div class="dashboard-column">
+      <!-- Total Expenses Card -->
+      <div class="dashboard-card total-card">
+        <svg class="progress-ring" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="54" stroke-dasharray="339.292" [attr.stroke-dashoffset]="getProgressRingOffset()"></circle>
+        </svg>
+        <div class="card-content">
+          <div class="card-icon">
+            <i class="fas fa-wallet"></i>
+          </div>
+          <h3>Total Expenses</h3>
+          <p class="amount">${{ totalExpenses.toFixed(2) }}</p>
+          <p class="card-subtitle">{{ selectedTimeframe | titlecase }}</p>
+          <div class="trend-indicator" [ngClass]="{
+            'text-success': monthlyChange <= 0, 
+            'text-danger': monthlyChange > 0,
+            'text-warning': monthlyChange > 0 && monthlyChangePercentage < 10
+          }">
+            <i class="fas" [ngClass]="{
+              'fa-arrow-up': monthlyChange > 0,
+              'fa-arrow-down': monthlyChange <= 0
+            }"></i>
+            <span>{{ abs(monthlyChangePercentage).toFixed(1) }}% vs last {{ selectedTimeframe }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart Card -->
+      <div class="dashboard-card chart-card">
+        <div class="chart-header">
+          <h3>
+            <i class="fas fa-chart-pie me-2"></i>
+            Expense Distribution
+          </h3>
+          <div class="chart-controls">
+            <button class="chart-type-btn" (click)="toggleChartType()">
+              <i class="fas" [ngClass]="{'fa-chart-pie': chartType === 'bar', 'fa-chart-bar': chartType === 'pie'}"></i>
+            </button>
+          </div>
+        </div>
+        <div class="chart-container" [class.loading]="loading">
+          <canvas #categoryChart></canvas>
+          <div class="loading-spinner" *ngIf="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Second Column - Category Breakdown -->
+    <div class="dashboard-column">
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>
+            <i class="fas fa-tags me-2"></i>
+            Category Breakdown
+          </h3>
+          <div class="filter-controls">
+            <select class="sort-select" (change)="changeCategorySort($event)">
+              <option value="amount-desc">Amount (High to Low)</option>
+              <option value="amount-asc">Amount (Low to High)</option>
+              <option value="name-asc">Name (A to Z)</option>
+              <option value="name-desc">Name (Z to A)</option>
+              <option value="budget">Budget Usage</option>
+            </select>
+          </div>
+        </div>
+        <div class="category-list">
+          <div class="category-item" *ngFor="let category of sortedCategories" 
+               [class.over-budget]="isOverBudget(category.key)"
+               (click)="showCategoryDetails(category.key)">
+            <div class="category-main">
+              <div class="category-icon" [ngClass]="category.key.toLowerCase()">
+                <i class="fas" [ngClass]="{
+                  'fa-file-invoice-dollar': category.key === 'Bills',
+                  'fa-utensils': category.key === 'Food',
+                  'fa-home': category.key === 'Housing',
+                  'fa-car': category.key === 'Transport',
+                  'fa-bolt': category.key === 'Utilities',
+                  'fa-film': category.key === 'Entertainment',
+                  'fa-shopping-bag': category.key === 'Shopping',
+                  'fa-heartbeat': category.key === 'Healthcare'
+                }"></i>
+              </div>
+              <div class="category-details">
+                <div class="category-header">
+                  <span class="category-name">{{ category.key }}</span>
+                  <div class="category-amounts">
+                    <span class="spent">${{ category.value.toFixed(2) }}</span>
+                    <span class="separator">/</span>
+                    <span class="budget">${{ categoryBudgets[category.key].toFixed(2) }}</span>
+                  </div>
+                </div>
+                <div class="budget-progress">
+                  <div class="progress-bar">
+                    <div class="progress-fill" 
+                         [style.width.%]="getBudgetUtilization(category.key)"
+                         [ngClass]="{
+                           'safe': getBudgetStatus(category.key) === 'safe',
+                           'warning': getBudgetStatus(category.key) === 'warning',
+                           'danger': getBudgetStatus(category.key) === 'danger'
+                         }"></div>
+                  </div>
+                </div>
+                <div class="remaining-text">
+                  Remaining: ${{ getRemainingBudget(category.key).toFixed(2) }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Third Column - Recent Transactions -->
+    <div class="dashboard-column">
+      <div class="dashboard-card">
+        <div class="card-header">
+          <h3>
+            <i class="fas fa-clock me-2"></i>
+            Recent Transactions
+          </h3>
+          <div class="filter-controls">
+            <select class="sort-select" (change)="changeTransactionSort($event)">
+              <option value="date-desc">Date (Newest First)</option>
+              <option value="date-asc">Date (Oldest First)</option>
+              <option value="amount-desc">Amount (High to Low)</option>
+              <option value="amount-asc">Amount (Low to High)</option>
+            </select>
+          </div>
+        </div>
+        <div class="transaction-list">
+          <div class="transaction-item" *ngFor="let expense of filteredAndSortedTransactions" 
+               (click)="showTransactionDetails(expense)">
+            <div class="transaction-content">
+              <div class="transaction-icon" [ngClass]="expense.category.toLowerCase()">
+                <i class="fas" [ngClass]="{
+                  'fa-file-invoice-dollar': expense.category === 'Bills',
+                  'fa-utensils': expense.category === 'Food',
+                  'fa-home': expense.category === 'Housing',
+                  'fa-car': expense.category === 'Transport',
+                  'fa-bolt': expense.category === 'Utilities',
+                  'fa-film': expense.category === 'Entertainment',
+                  'fa-shopping-bag': expense.category === 'Shopping',
+                  'fa-heartbeat': expense.category === 'Healthcare'
+                }"></i>
+              </div>
+              <div class="transaction-details">
+                <div class="transaction-title">{{ expense.description }}</div>
+                <div class="transaction-meta">
+                  <span class="category-label">{{ expense.category }}</span>
+                  <span class="transaction-date">{{ expense.date | date:'MMM dd, yyyy' }}</span>
+                </div>
+              </div>
+              <div class="transaction-amount">${{ expense.amount.toFixed(2) }}</div>
+            </div>
+          </div>
+          <div class="no-results" *ngIf="filteredAndSortedTransactions.length === 0">
+            <i class="fas fa-search"></i>
+            <p>No transactions found</p>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="view-all-btn" routerLink="/expenses">
+            View All Transactions
+            <i class="fas fa-arrow-right ms-2"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

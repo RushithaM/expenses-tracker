@@ -1,0 +1,111 @@
+.expense-list-container {
+  padding: 20px;
+}
+
+.expense-list-container h2 {
+  font-size: 24px;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.category-container {
+  margin-bottom: 30px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.budget-info {
+  display: flex;
+  gap: 20px;
+}
+
+.budget-info p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.budget-info p.exceeded {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.expense-list {
+  padding: 0 20px;
+}
+
+.expense-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.expense-details {
+  flex-grow: 1;
+}
+
+.expense-details h4 {
+  margin: 0 0 5px 0;
+  color: #212529;
+}
+
+.expense-amount, .expense-date {
+  margin: 0;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.recurring-info {
+  margin: 5px 0 0 0;
+  color: #0d6efd;
+  font-size: 0.85rem;
+}
+
+.expense-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-button, .delete-button {
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.edit-button {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.delete-button {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.edit-button:hover {
+  background-color: #ffca2c;
+}
+
+.delete-button:hover {
+  background-color: #bb2d3b;
+}
+
+.no-expenses {
+  text-align: center;
+  color: #6c757d;
+  padding: 20px;
+}

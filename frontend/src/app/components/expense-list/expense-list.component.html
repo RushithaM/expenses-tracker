@@ -1,0 +1,37 @@
+<div class="expense-list-container">
+  <h2>Expense List</h2>
+  <div class="category-container" *ngFor="let category of groupedExpenses | keyvalue">
+    <div class="category-header">
+      <h3>{{ category.key }}</h3>
+      <div class="budget-info" *ngIf="categoryBudgets[category.key]">
+        <p>Budget: ${{ categoryBudgets[category.key].limit }}</p>
+        <p [class.exceeded]="categoryBudgets[category.key].currentSpent > categoryBudgets[category.key].limit">
+          Spent: ${{ categoryBudgets[category.key].currentSpent }}
+        </p>
+      </div>
+    </div>
+    <div class="expense-list">
+      <div *ngFor="let expense of category.value" class="expense-item">
+        <div class="expense-details">
+          <h4>{{ expense.description }}</h4>
+          <p class="expense-amount">Amount: ${{ expense.amount.toFixed(2) }}</p>
+          <p class="expense-date">Date: {{ expense.date | date:'mediumDate' }}</p>
+          <p *ngIf="expense.isRecurring" class="recurring-info">
+            Recurring: {{ expense.recurringInterval }}
+            <br>
+            Next Due: {{ expense.nextDueDate | date:'mediumDate' }}
+          </p>
+        </div>
+        <div class="expense-actions">
+          <button (click)="editExpense(expense.id)" class="edit-button">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button (click)="deleteExpense(expense.id)" class="delete-button">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p *ngIf="expenses.length === 0" class="no-expenses">No expenses to display.</p>
+</div>
